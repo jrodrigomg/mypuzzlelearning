@@ -139,8 +139,10 @@ function draw(){
             let allDead = verificarGameOver();
             alives--;
             if(allDead){
-              console.log("Game over! restart");
-              initialize();
+              setTimeout(function(){
+                console.log("Game over! restart");
+                initialize();
+              },500);
               return;
             }
           }

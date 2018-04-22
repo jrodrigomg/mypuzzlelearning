@@ -44,9 +44,9 @@ class Player {
       //Obtenemos el valor que tocaría responder, la respuesta correcta.
       let correctAnswer = sortOptions[indexCorrect];
       // console.log("output:", val, "Correct:", correctAnswer);
-      console.log("input choice:");
-      input_tf.print();
-      console.log("output choise:",output_tf);
+      // console.log("input choice:");
+      // input_tf.print();
+      // console.log("output choise:",output_tf);
       //console.log("choice:", x, ",", y);
 
       return this.addAnswer(val);
@@ -97,6 +97,7 @@ class Player {
       this.correctOptions.push(answer);
       this.score++;
       if(this.score == squares_count*squares_count){
+        bestScore = this.score
         this.onGame = false;
         winings++;
       }
@@ -114,10 +115,10 @@ class Player {
     let input_tf = tf.tensor2d([inputs], [1,squares_count*squares_count]);
     let outputs = this.getOutputTrainModel();
     let outputs_tf = tf.tensor2d([outputs], [1,squares_count*squares_count]);
-    console.log("input train:");
-    input_tf.print();
-    console.log("output train:");
-    outputs_tf.print();
+    // console.log("input train:");
+    // input_tf.print();
+    // console.log("output train:");
+    // outputs_tf.print();
     await this.model.fit(input_tf,outputs_tf,{epochs:3}).then(()=>{
       //  console.log("Entrenado!");
     });

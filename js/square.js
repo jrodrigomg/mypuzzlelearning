@@ -4,11 +4,15 @@ class Square {
     this.x = _x;
     this.y = _y;
     this.value = value;
-    this.color = 255;
+    this.verified = false;
   }
 
   show(){
-		fill(this.color);
+    if(!this.verified){
+    		fill(255);
+    }else{
+      fill(216, 232, 234);
+    }
 		strokeWeight(4);
 		stroke(2);
 		rect(this.x * SQUARE_SIZE,this.y * SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE);

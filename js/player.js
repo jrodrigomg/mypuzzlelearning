@@ -91,8 +91,23 @@ class Player {
     return res;
   }
 
+
+  setVerifiedSquare(answer){
+    for(let i =0; i<squares_count;i++){
+      for(let j=0; j<squares_count; j++){
+        let square = squares[i][j];
+        if(square.value == answer)
+        {
+          square.verified = true;
+          return
+        }
+      }
+    }
+  }
+
   async addAnswer(answer){
     await this.trainModel();
+    this.setVerifiedSquare(answer);
     if(this.verifyAnswer(answer)){
       this.correctOptions.push(answer);
       this.score++;
@@ -144,10 +159,8 @@ class Player {
 
 
   verifyAnswer(answer){
-    //Si se repite está jodido...
-    let correct = this.verifyRepeated(answer);
     //Verificamos la respuesta
-    correct = correct && this.verifyOptions(answer);
+    let correct = this.verifyOptions(answer);
     //Pero debe de estar vivo aún..
     correct = correct && this.onGame;
     return correct;

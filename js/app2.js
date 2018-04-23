@@ -5,6 +5,14 @@ const CANVAS_WIDTH = 200;
 const CANVAS_HEIGHT = 200;
 const SQUARE_SIZE = 100;
 const PLAYERS_COUNT = 1;
+
+//What leawrn?
+const ORDER_ASCENDING = 0;
+const ORDER_DESCENDING = 1;
+
+const ASCENDING_MESSAGE = "Ascending order";
+const DESCENDING_MESSAGE = "Descending order";
+
 let squares_count;
 
 //Game variables
@@ -18,9 +26,12 @@ let fast;
 let lastSpeed = 10;
 let mytime;
 let winings=0;
+let order = 0;
+let genericQuestion;
+let startButton;
+let selectOrder;
 
 // //Para la red neuronal
-
 let model;
 let bestScore = 0;
 
@@ -28,15 +39,35 @@ let bestScore = 0;
 function setup(){
   squares_count = CANVAS_WIDTH/SQUARE_SIZE; //apply for height to!
   createCanvas(CANVAS_WIDTH,CANVAS_HEIGHT);
-  fast = createSlider(200,8000,8000);
-  fast.position(20, CANVAS_HEIGHT + 100);
 
   generalInfo= createElement('h3', '');
   generalInfo.position(20, CANVAS_HEIGHT + 200);
-  initialize();
-  startTime();
-  //noLoop();
 
+  genericQuestion = createElement('h3', 'What to learn?');
+  genericQuestion.position(20, CANVAS_HEIGHT + 100);
+
+  selectOrder = createSelect();
+  selectOrder.position(20, CANVAS_HEIGHT + 150);
+  selectOrder.option(ASCENDING_MESSAGE);
+  selectOrder.option(DESCENDING_MESSAGE);
+
+
+  startButton = createButton('Start!');
+  startButton.position(20, CANVAS_HEIGHT + 250);
+  startButton.mousePressed(startEverything);
+
+}
+
+function startEverything(){
+    fast = createSlider(200,8000,8000);
+    fast.position(20, CANVAS_HEIGHT + 150);
+    order = getOrder();
+    initialize();
+    startTime();
+    //noLoop();
+    startButton.remove();
+    selectOrder.remove();
+    genericQuestion.elt.innerHTML = "How fast?";
 }
 
 //Inicializa todo para un nuevo juego.
@@ -59,7 +90,7 @@ function initialize(){
     squares[i] = [];
     for(let j=0; j<squares_count; j++){
       //Escogemos una opcion
-      let index = floor(random(0, options.length));
+      let index = floor(random(1, options.length));
       let val = options[index];
       //Cramos el cuadrado
       squares[i][j] = new Square(i,j,val);
@@ -73,9 +104,44 @@ function initialize(){
   //hacemos copia del array.
   sortOptions = resultOptions.slice();
   //Ordenamos el array
-  sortOptions.sort(function(a, b){return a-b});
+  let sortFunction = getSortFunction();
+  sortOptions.sort(sortFunction);
 
   createPlayers();
+}
+
+//GET the choise of user.
+function getOrder(){
+  let selectedValue = selectOrder.selected();
+  switch (selectedValue) {
+    case DESCENDING_MESSAGE:
+      order = ORDER_DESCENDING;
+      break;
+    default:
+      order = ORDER_ASCENDING;
+  }
+  return order;
+}
+
+
+
+//Get the function to learn.
+function getSortFunction(){
+  //Sort in ascending order
+  let sortAscending = function(a, b){return a-b};
+  //Sort in descending order
+  let sortDescending = function(a, b){return b-a};
+
+  let sortFunction;
+  switch (order) {
+    case ORDER_ASCENDING:
+      sortFunction = sortAscending;
+      break;
+    default:
+      sortFunction = sortDescending;
+  }
+
+  return sortFunction;
 }
 
 function removerTextoPlayer(){
@@ -120,13 +186,16 @@ function startTime(value){
 }
 
 function draw(){
-  let fastValue = fast.value();
-  if(lastSpeed != fastValue)
-    startTime(fastValue);
-  generalInfo.elt.innerHTML = "Info:  best score:" + bestScore + " win:" + winings;
+
   background(0);
-  dibujarCuadrados();
-  dibujarJugadores();
+  if(fast){
+      let fastValue = fast.value();
+      if(lastSpeed != fastValue)
+        startTime(fastValue);
+      generalInfo.elt.innerHTML = "Info:  best score:" + bestScore + " count(win):" + winings;
+      dibujarCuadrados();
+      dibujarJugadores();
+  }
 }
 
  function tomarDesiciones(){

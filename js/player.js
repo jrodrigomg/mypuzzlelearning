@@ -8,7 +8,7 @@ class Player {
     this.index = index;
     this.onGame = true;
   	this.info= createElement('h3', '');
-  	this.info.position(CANVAS_WIDTH+ 100, index*40);
+  	this.info.position(CANVAS_WIDTH+ 100, index*40 + 100);
     this.info.style("color:rgb("+this.r+", "+this.g+", "+this.b+");");
     //Este será nuestra nueva tabla a comparar, debido a que son varios jugadores con diferentes opciones.
     this.playerOptions = resultOptions.slice();
@@ -47,7 +47,7 @@ class Player {
       // console.log("input choice:");
       // input_tf.print();
       // console.log("output choise:",output_tf);
-      //console.log("choice:", x, ",", y);
+      // console.log("choice:", x, ",", y);
 
       return this.addAnswer(val);
   }
@@ -126,7 +126,7 @@ class Player {
 
   getOutputTrainModel(){
     let indexCorrect = this.correctOptions.length;
-    //Obtenemos el valor que tocaría responder, la respuesta correcta.
+    //Obtenemos el valor que tocaría responder, la respuesta correcta
     let val = sortOptions[indexCorrect];
     let outputs = [];
     let index=0;
@@ -171,7 +171,7 @@ class Player {
     for(let i=0; i< this.playerOptions.length;i++){
       let val = this.playerOptions[i];
       if(val==answer)
-        this.playerOptions[i] = 200;
+        this.playerOptions[i] = 200 * (1-order);
     }
   }
 
